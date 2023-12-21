@@ -7,7 +7,6 @@ const bodyParser = require('body-parser')
 
 const { logging } = require('./lib/logging/morgan')
 const { routes } = require('./routes/router')
-const fallbackHandler = require('./handler/fallback/fallbackHandler');
 require('./lib/mongo/db')
 
 

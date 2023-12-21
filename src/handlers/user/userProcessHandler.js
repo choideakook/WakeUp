@@ -15,5 +15,8 @@ exports.join = async (userData) => {
     });
 
     await user.save()
-        .then(saveUser => console.log('user 정보 저장 성공'))
+        .then(saveUser => {
+            console.log('user 정보 저장 성공')
+            return saveUser
+        })
 }

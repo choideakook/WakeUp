@@ -1,8 +1,8 @@
-const fallbackHandler = require("../handler/fallback/fallbackHandler");
+const fallbackHandler = require("../handlers/fallback/fallbackHandler");
 const express = require('express');
 const router = express.Router();
 
-const authHandler = require('../handler/auth/authHandler')
+const authHandler = require('../handlers/auth/authHandler')
 
 const { auth } = require('../.credentails/development.json')
 

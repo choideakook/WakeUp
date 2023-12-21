@@ -1,6 +1,8 @@
 const axios = require('axios')
 
-const userProcessHandler = require('../../handler/user/userProcessHandler')
+const userProcessHandler = require('../user/userProcessHandler')
+const userQueryService = require('../../services/user/userQueryService')
+const jwtService = require('../../lib/jwt/jwtService')
 
 const KAKAO_TOKEN_REQ_URL = 'https://kauth.kakao.com/oauth/token'
 const KAKAO_TOKEN_DECRYPT_URL = 'https://kapi.kakao.com/v2/user/me'
@@ -15,11 +17,11 @@ exports.login = async (req, res, next) => {
         client_secret: auth.clientSecret
     }
     const header = {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        headers: {"Content-Type": "application/x-www-form-urlencoded"}
     }
 
     await axios.post(KAKAO_TOKEN_REQ_URL, body, header)
-        .then( async response => {
+        .then(async response => {
             const header = {
                 headers: {
                     "Authorization": `Bearer ${response.data.access_token}`,
@@ -28,9 +30,19 @@ exports.login = async (req, res, next) => {
             }
             await axios.get(KAKAO_TOKEN_DECRYPT_URL, header)
                 .then(response => {
-                    userProcessHandler.join(response.data)
-                    res.send('login success!')
+                    const user = getUser(response.data)
+                    const tokens = jwtService.createToken(user)
+                    res.send(tokens)
                 })
         })
         .catch(err => next(err))
+}
+
+async function getUser(userData) {
+    const user = await userQueryService.findByUsername(userData.id)
+
+    if (!user)
+        return userProcessHandler.join(userData)
+
+    return user;
 }
