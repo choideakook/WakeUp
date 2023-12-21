@@ -20,7 +20,7 @@ function getSecretKey() {
 exports.getToken = (claims, expireIn) => {
     return jwt.sign(claims, getSecretKey(), {
         algorithm: 'HS512',
-        expireIn
+        expiresIn: expireIn
     })
 }
 

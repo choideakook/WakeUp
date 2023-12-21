@@ -29,8 +29,8 @@ exports.login = async (req, res, next) => {
                 }
             }
             await axios.get(KAKAO_TOKEN_DECRYPT_URL, header)
-                .then(response => {
-                    const user = getUser(response.data)
+                .then(async response => {
+                    const user = await getUser(response.data)
                     const tokens = jwtService.createToken(user)
                     res.send(tokens)
                 })
