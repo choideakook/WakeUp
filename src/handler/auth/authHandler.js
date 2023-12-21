@@ -12,24 +12,21 @@ exports.login = async (req, res, next) => {
         code: req.query.code,
         client_secret: auth.clientSecret
     }
-
     const header = {
         headers: { "Content-Type": "application/x-www-form-urlencoded" }
     }
 
     await axios.post(KAKAO_TOKEN_REQ_URL, body, header)
         .then( async response => {
-
             const header = {
                 headers: {
                     "Authorization": `Bearer ${response.data.access_token}`,
                     "Content-type": "application/json"
                 }
             }
-
             await axios.get(KAKAO_TOKEN_DECRYPT_URL, header)
                 .then(response => {
-                    res.send('login seccess!')
+                    res.send('login success!')
                 })
         })
         .catch(err => next(err))
