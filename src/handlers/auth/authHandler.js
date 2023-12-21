@@ -3,6 +3,7 @@ const axios = require('axios')
 const userProcessHandler = require('../user/userProcessHandler')
 const userQueryService = require('../../services/user/userQueryService')
 const jwtService = require('../../lib/jwt/jwtService')
+const redisService = require('../../lib/redis/redisService')
 
 const KAKAO_TOKEN_REQ_URL = 'https://kauth.kakao.com/oauth/token'
 const KAKAO_TOKEN_DECRYPT_URL = 'https://kapi.kakao.com/v2/user/me'
@@ -32,6 +33,7 @@ exports.login = async (req, res, next) => {
                 .then(async response => {
                     const user = await getUser(response.data)
                     const tokens = jwtService.createToken(user)
+                    saveToRedis(tokens, user.username)
                     res.send(tokens)
                 })
         })
@@ -45,4 +47,8 @@ async function getUser(userData) {
         return userProcessHandler.join(userData)
 
     return user;
+}
+
+function saveToRedis (token, username) {
+    redisService.set(token.rtk, username)
 }
