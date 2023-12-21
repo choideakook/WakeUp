@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
                 .then(async response => {
                     const user = await getUser(response.data)
                     const tokens = jwtService.createToken(user)
-                    saveToRedis(tokens, user.username)
+                    redisService.set(user.username, tokens.rtk)
                     res.send(tokens)
                 })
         })
@@ -47,8 +47,4 @@ async function getUser(userData) {
         return userProcessHandler.join(userData)
 
     return user;
-}
-
-function saveToRedis (token, username) {
-    redisService.set(token.rtk, username)
 }
