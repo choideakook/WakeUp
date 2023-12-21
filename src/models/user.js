@@ -10,7 +10,8 @@ const userSchema = mongoose.Schema({
     wallet: {
         cash: Number,
         coin: Number
-    }
+    },
+    createDate: Date
 })
 
 const User = mongoose.model('User', userSchema)

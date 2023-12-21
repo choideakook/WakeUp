@@ -1,5 +1,7 @@
 const axios = require('axios')
 
+const userProcessHandler = require('../../handler/user/userProcessHandler')
+
 const KAKAO_TOKEN_REQ_URL = 'https://kauth.kakao.com/oauth/token'
 const KAKAO_TOKEN_DECRYPT_URL = 'https://kapi.kakao.com/v2/user/me'
 const {auth} = require('../../.credentails/development.json')
@@ -26,6 +28,7 @@ exports.login = async (req, res, next) => {
             }
             await axios.get(KAKAO_TOKEN_DECRYPT_URL, header)
                 .then(response => {
+                    userProcessHandler.join(response.data)
                     res.send('login success!')
                 })
         })
