@@ -1,4 +1,6 @@
-exports.notFound = (req, res) => res.render('fallback/404')
+exports.notFound = (req, res) => {
+    res.render('fallback/404', { url: req.originalUrl})
+}
 
 exports.serverError = (err, req, res, next) => {
     console.error('err :', err)

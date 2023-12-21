@@ -3,6 +3,7 @@ const app = express();
 const port = 3000
 
 const { engine } = require('express-handlebars');
+const bodyParser = require('body-parser')
 
 const { logging } = require('./lib/logging/morgan')
 const { routes } = require('./routes/router')
@@ -26,7 +27,10 @@ app.set('view engine', '.hbs');
 
 
 //-- application setting --//
+app.use(express.json());
 logging(app)
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(routes)
 
 
