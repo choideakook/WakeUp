@@ -21,6 +21,7 @@ exports.login = async (req, res, next) => {
         headers: {"Content-Type": "application/x-www-form-urlencoded"}
     }
 
+    // 쿠키 요청
     await axios.post(KAKAO_TOKEN_REQ_URL, body, header)
         .then(async response => {
             const header = {
@@ -29,12 +30,16 @@ exports.login = async (req, res, next) => {
                     "Content-type": "application/json"
                 }
             }
+
+            // 개인정보 요청
             await axios.get(KAKAO_TOKEN_DECRYPT_URL, header)
                 .then(async response => {
+
+                    // 인증 완료 (jwt 발급)
                     const user = await getUser(response.data)
                     const tokens = jwtService.createToken(user)
                     redisService.set(user.username, tokens.rtk)
-                    res.cookie("rtk", tokens.rtk)
+                    res.cookie('rtk', tokens.rtk, { signed: true })
                     res.json({ 'atk': tokens.atk })
                 })
         })
