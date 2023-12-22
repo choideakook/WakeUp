@@ -6,7 +6,10 @@ const { engine } = require('express-handlebars');
 const bodyParser = require('body-parser')
 
 const { logging } = require('./lib/logging/morgan')
-const { routes } = require('./routes/router')
+const { webRouter } = require('./routes/webRouter')
+const { authRouter } = require('./routes/authRouter')
+const { missionRouter } = require('./routes/missionRouter')
+const { fallbackRouter } = require('./routes/fallbackRouter')
 require('./lib/mongo/db')
 
 
@@ -30,8 +33,13 @@ logging(app)
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(routes)
 
+
+//-- routing --//
+app.use('/', webRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/mission', missionRouter)
+app.use(fallbackRouter)
 
 
 //-- application running --//
