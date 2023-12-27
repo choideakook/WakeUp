@@ -18,16 +18,18 @@
 
 
                 <li><a class="justify-between">내 프로필</a></li>
-                <li>
-                    <a href="https://kauth.kakao.com/oauth/authorize?client_id={{auth.restApiKey}}&redirect_uri={{auth.redirectUrl}}&response_type=code">
-                    로그인
-                    </a>
-                </li>
-                <li>
-                    <a>로그아웃</a>
-                </li>
 
-
+                {{# if atk}}
+                    <li id="logout">
+                        <a>로그아웃</a>
+                    </li>
+                {{else}}
+                    <li id="login">
+                        <a href="https://kauth.kakao.com/oauth/authorize?client_id={{auth.restApiKey}}&redirect_uri={{auth.redirectUrl}}&response_type=code">
+                        로그인
+                        </a>
+                    </li>
+                {{/if}}
             </ul>
         </div>
     </div>
